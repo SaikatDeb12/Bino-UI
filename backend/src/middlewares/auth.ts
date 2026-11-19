@@ -1,8 +1,6 @@
-// src/middlewares/auth.middleware.ts
 import type { Request, Response, NextFunction } from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import { env } from "../lib/env";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../utils/session";
 
 export function authMiddleware(
     req: Request,

@@ -127,4 +127,27 @@ export const authController = {
             });
         }
     },
+    logout: async (req: Request, res: Response) => {
+        clearSession(res);
+        return res.status(200).json({
+            message: "logged out successfully",
+        });
+    },
+    profile: async (req: Request, res: Response) => {
+        try {
+            // select and not populate(for getting details through ref)
+            const user = await UserModel.findById({ _id: req.userId }).select(
+                "-password",
+            );
+            if (!user) {
+                return res.status(404).json({
+                    message: "user not found",
+                });
+            }
+            return res.status(200).json({
+                message: "user found",
+                user: user,
+            });
+        } catch (error) { }
+    },
 };

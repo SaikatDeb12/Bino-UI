@@ -1,21 +1,27 @@
 // src/middlewares/auth.middleware.ts
 import type { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 import { env } from "../lib/env";
-import { COOKIE_NAME } from "../utils/session";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../utils/session";
 
-export function requireUser(req: Request, res: Response, next: NextFunction) {
-    const token = req.cookies[COOKIE_NAME];
-
-    if (!token) {
-        return res.status(401).json({ message: "Please sign in" });
-    }
-
+export function authMiddleware(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) {
     try {
-        const payload = jwt.verify(token, env.JWT_SECRET) as { userId: string };
-        req.userId = payload.userId;
+        const token = req.cookies["ACCESS_TOKEN"];
+
+        if (!token) {
+            return res.status(404).json({ message: "token not found" });
+        }
+
+        const decoded = jwt.verify(token, env.ACCESS_TOKEN_SECRET);
+        req.userId = (decoded as JwtPayload).userId;
         next();
     } catch {
-        return res.status(401).json({ message: "Please sign in again" });
+        return res.status(401).json({
+            message: "invalid token",
+        });
     }
 }

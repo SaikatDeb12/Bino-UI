@@ -23,6 +23,7 @@ export const createSession = async (res: Response, userId: string) => {
         { expiresIn: "7d" },
     );
 
+    // generate tokens (using secret keys), and then set
     res.cookie(ACCESS_TOKEN, accessToken, {
         ...cookieOptions,
         maxAge: 15 * 60 * 1000,

@@ -2,7 +2,8 @@ import { env } from "../lib/env";
 import type { Request, Response, CookieOptions } from "express";
 import jwt from "jsonwebtoken";
 
-const COOKIE_NAME = "session";
+export const ACCESS_TOKEN = "session";
+export const REFRESH_TOKEN = "session";
 
 const cookieOptions: CookieOptions = {
     httpOnly: true,
@@ -12,16 +13,28 @@ const cookieOptions: CookieOptions = {
 };
 
 export const createSession = async (res: Response, userId: string) => {
-    const token = jwt.sign({ id: userId }, env.SECRET_KEY, {
-        expiresIn: "1d",
+    const accessToken = jwt.sign({ userId: userId }, env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "15m",
     });
 
-    res.cookie(COOKIE_NAME, token, {
+    const refreshToken = jwt.sign(
+        { userId: userId },
+        env.REFRESH_TOKEN_SECRET,
+        { expiresIn: "7d" },
+    );
+
+    res.cookie(ACCESS_TOKEN, accessToken, {
         ...cookieOptions,
-        maxAge: 60 * 60 * 24 * 1000,
+        maxAge: 15 * 60 * 1000,
+    });
+
+    res.cookie(REFRESH_TOKEN, refreshToken, {
+        ...cookieOptions,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 };
 
 export const clearSession = (res: Response) => {
-    res.clearCookie(COOKIE_NAME, cookieOptions);
+    res.clearCookie(ACCESS_TOKEN, cookieOptions);
+    res.clearCookie(REFRESH_TOKEN, cookieOptions);
 };

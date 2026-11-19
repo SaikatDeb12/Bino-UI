@@ -2,8 +2,6 @@ import type { Request, Response } from "express";
 import { signUpSchema } from "../utils/auth";
 import { UserModel } from "../models/user";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { env } from "../lib/env";
 import { createSession } from "../utils/session";
 
 export const authController = {
@@ -19,10 +17,10 @@ export const authController = {
             }
 
             const { username, email, password } = data;
-            const isExistUsername = await UserModel.findOne({
+            const existingUser = await UserModel.findOne({
                 username: username,
             });
-            if (isExistUsername) {
+            if (existingUser) {
                 return res.status(400).json({
                     message: "username already exists",
                 });
@@ -58,28 +56,30 @@ export const authController = {
                 });
             }
 
-            const { username, email, password } = data;
-            const isExistUser = await UserModel.findOne({
+            const { username, password } = data;
+            const user = await UserModel.findOne({
                 username: username,
             });
-            if (!isExistUser) {
+            if (!user) {
                 return res.status(404).json({
-                    message: "no user with this username found",
+                    message: "no user found",
                 });
             }
 
-            const isValidPassword = jwt.verify(isExistUser.password, password);
+            const isValidPassword = await bcrypt.compare(
+                password,
+                user.password,
+            );
             if (!isValidPassword) {
                 return res.status(401).json({
-                    message: "invalid password",
+                    message: "invalid credentials",
                 });
             }
 
-            const token = jwt.sign({ userId: isExistUser._id }, env.SECRET_KEY);
+            createSession(res, user._id.toString());
 
             return res.status(200).json({
                 message: "login successfull",
-                token: token,
             });
         } catch (error) {
             console.log("signup error : ", error);

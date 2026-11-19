@@ -8,6 +8,8 @@ const envSchema = z.object({
     SECRET_KEY: z.string(),
     RESEND_API_KEY: z.string(),
     EMAIL_FROM: z.string(),
+    ACCESS_TOKEN_SECRET: z.string(),
+    REFRESH_TOKEN_SECRET: z.string(),
 });
 
 export const env = envSchema.parse(process.env);

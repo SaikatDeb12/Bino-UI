@@ -4,6 +4,7 @@ import { UserModel } from "../models/user";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { env } from "../lib/env";
+import { createSession } from "../utils/session";
 
 export const authController = {
     signup: async (req: Request, res: Response) => {
@@ -34,9 +35,10 @@ export const authController = {
                 password: hashedPassword,
             });
 
+            createSession(res, newUser._id.toString());
+
             return res.status(201).json({
                 message: "profile created successfully",
-                token: token,
             });
         } catch (error) {
             console.log("signup error : ", error);

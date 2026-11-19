@@ -6,6 +6,8 @@ const envSchema = z.object({
     PORT: z.coerce.string(),
     NODE_ENV: z.string().default("development"),
     SECRET_KEY: z.string(),
+    RESEND_API_KEY: z.string(),
+    EMAIL_FROM: z.string(),
 });
 
 export const env = envSchema.parse(process.env);

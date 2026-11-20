@@ -24,87 +24,117 @@ export const AuthForm = ({ mode, onSubmit }: AuthFormProps) => {
 
     const isSignup = mode === "signup";
 
+    const inputClasses =
+        "w-full rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-2.5 text-sm text-zinc-100 placeholder:text-zinc-500 transition-colors hover:border-zinc-700 focus:border-lime-500 focus:outline-none focus:ring-1 focus:ring-lime-500/50 disabled:cursor-not-allowed disabled:opacity-50";
+
     return (
-        <section className="mx-auto w-[92%] rounded-xl border border-[#343a34] bg-[#181c19] p-[clamp(22px,4vw,36px)] max-w-md">
-            <h1 className="text-[clamp(28px,4vw,40px)] leading-[1.15] font-semibold tracking-[-0.045em]">
-                {isSignup ? "Create an account" : "Log in"}
-            </h1>
+        <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-zinc-950 px-4 py-12">
+            <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center">
+                <div className="h-[400px] w-[400px] rounded-full bg-lime-500/10 blur-[100px]" />
+            </div>
 
-            <form className="mt-7 grid gap-5" onSubmit={handleSubmit(onSubmit)}>
-                {isSignup && (
-                    <label className="grid gap-[7px] text-sm">
-                        Username
-                        <input
-                            {...register("username")}
-                            autoComplete="username"
-                            minLength={3}
-                            maxLength={20}
-                            className="w-full rounded-md border border-[#424a42] bg-[#111512] px-3 py-2.5 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#b5ed83]"
-                        />
-                        {errors.username && (
-                            <span className="text-sm text-[#ffb4ab]">
-                                {errors.username.message}
-                            </span>
+            <section className="w-full max-w-md overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 shadow-2xl backdrop-blur-xl">
+                <div className="p-8 sm:p-10">
+                    <div className="mb-8 space-y-2 text-center">
+                        <h1 className="text-2xl font-bold tracking-tight text-zinc-100 sm:text-3xl">
+                            {isSignup ? "Create an account" : "Welcome back"}
+                        </h1>
+                        <p className="text-sm text-zinc-400">
+                            {isSignup
+                                ? "Enter your details to create your account"
+                                : "Enter your credentials to access your account"}
+                        </p>
+                    </div>
+
+                    <form
+                        className="grid gap-5"
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
+                        {isSignup && (
+                            <label className="grid gap-2 text-sm font-medium text-zinc-300">
+                                Username
+                                <input
+                                    {...register("username")}
+                                    autoComplete="username"
+                                    minLength={3}
+                                    maxLength={20}
+                                    placeholder="johndoe"
+                                    className={inputClasses}
+                                />
+                                {errors.username && (
+                                    <span className="text-xs font-normal text-red-400">
+                                        {errors.username.message}
+                                    </span>
+                                )}
+                            </label>
                         )}
-                    </label>
-                )}
 
-                <label className="grid gap-[7px] text-sm">
-                    Email
-                    <input
-                        {...register("email")}
-                        type="email"
-                        autoComplete="email"
-                        className="w-full rounded-md border border-[#424a42] bg-[#111512] px-3 py-2.5 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#b5ed83]"
-                    />
-                    {errors.email && (
-                        <span className="text-sm text-[#ffb4ab]">
-                            {errors.email.message}
-                        </span>
-                    )}
-                </label>
+                        <label className="grid gap-2 text-sm font-medium text-zinc-300">
+                            Email
+                            <input
+                                {...register("email")}
+                                type="email"
+                                autoComplete="email"
+                                placeholder="name@example.com"
+                                className={inputClasses}
+                            />
+                            {errors.email && (
+                                <span className="text-xs font-normal text-red-400">
+                                    {errors.email.message}
+                                </span>
+                            )}
+                        </label>
 
-                <label className="grid gap-[7px] text-sm">
-                    Password
-                    <input
-                        {...register("password")}
-                        type="password"
-                        autoComplete={
-                            isSignup ? "new-password" : "current-password"
-                        }
-                        minLength={8}
-                        maxLength={72}
-                        className="w-full rounded-md border border-[#424a42] bg-[#111512] px-3 py-2.5 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#b5ed83]"
-                    />
-                    {errors.password && (
-                        <span className="text-sm text-[#ffb4ab]">
-                            {errors.password.message}
-                        </span>
-                    )}
-                </label>
+                        <label className="grid gap-2 text-sm font-medium text-zinc-300">
+                            Password
+                            <input
+                                {...register("password")}
+                                type="password"
+                                autoComplete={
+                                    isSignup
+                                        ? "new-password"
+                                        : "current-password"
+                                }
+                                minLength={8}
+                                maxLength={72}
+                                placeholder="••••••••"
+                                className={inputClasses}
+                            />
+                            {errors.password && (
+                                <span className="text-xs font-normal text-red-400">
+                                    {errors.password.message}
+                                </span>
+                            )}
+                        </label>
 
-                <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="inline-flex cursor-pointer items-center justify-center rounded-md bg-[#b5ed83] px-[15px] py-[9px] text-sm font-semibold text-[#172011] transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-55"
-                >
-                    {isSubmitting
-                        ? "Please wait..."
-                        : isSignup
-                            ? "Create account"
-                            : "Log in"}
-                </button>
-            </form>
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="mt-2 inline-flex w-full cursor-pointer items-center justify-center rounded-lg bg-lime-300 px-4 py-2.5 text-sm font-semibold text-zinc-950 transition-all hover:bg-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-500/50 focus:ring-offset-2 focus:ring-offset-zinc-900 disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                            {isSubmitting
+                                ? "Please wait..."
+                                : isSignup
+                                    ? "Create account"
+                                    : "Sign in"}
+                        </button>
+                    </form>
+                </div>
 
-            <p className="mt-5 text-sm text-zinc-400">
-                {isSignup ? "Already have an account? " : "New to Exchange? "}
-                <Link
-                    className="text-zinc-100 underline hover:text-white"
-                    to={isSignup ? "/signin" : "/signup"}
-                >
-                    {isSignup ? "Sign in" : "Sign up"}
-                </Link>
-            </p>
-        </section>
+                <div className="border-t border-zinc-800 bg-zinc-900/50 p-6 text-center text-sm">
+                    <span className="text-zinc-400">
+                        {isSignup
+                            ? "Already have an account? "
+                            : "Don't have an account? "}
+                    </span>
+                    <Link
+                        className="font-medium text-lime-400 transition-colors hover:text-lime-300"
+                        to={isSignup ? "/signin" : "/signup"}
+                    >
+                        {isSignup ? "Sign in" : "Sign up"}
+                    </Link>
+                </div>
+            </section>
+        </div>
     );
 };

@@ -2,10 +2,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authSchema, type AuthFormValues } from "@/schema/auth.schema";
 import { Link } from "react-router";
+import { Input } from "./ui/input";
 
 type AuthFormProps = {
     mode: "signin" | "signup";
-    onSubmit: () => void | Promise<void>;
+    onSubmit: (data: AuthFormValues) => void | Promise<void>;
 };
 
 export const AuthForm = ({ mode, onSubmit }: AuthFormProps) => {
@@ -23,9 +24,6 @@ export const AuthForm = ({ mode, onSubmit }: AuthFormProps) => {
     });
 
     const isSignup = mode === "signup";
-
-    const inputClasses =
-        "w-full rounded-lg border border-zinc-800 bg-zinc-900/50 px-4 py-2.5 text-sm text-zinc-100 placeholder:text-zinc-500 transition-colors hover:border-zinc-700 focus:border-lime-500 focus:outline-none focus:ring-1 focus:ring-lime-500/50 disabled:cursor-not-allowed disabled:opacity-50";
 
     return (
         <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-zinc-950 px-4 py-12">
@@ -53,13 +51,12 @@ export const AuthForm = ({ mode, onSubmit }: AuthFormProps) => {
                         {isSignup && (
                             <label className="grid gap-2 text-sm font-medium text-zinc-300">
                                 Username
-                                <input
+                                <Input
                                     {...register("username")}
                                     autoComplete="username"
                                     minLength={3}
                                     maxLength={20}
                                     placeholder="johndoe"
-                                    className={inputClasses}
                                 />
                                 {errors.username && (
                                     <span className="text-xs font-normal text-red-400">
@@ -71,12 +68,11 @@ export const AuthForm = ({ mode, onSubmit }: AuthFormProps) => {
 
                         <label className="grid gap-2 text-sm font-medium text-zinc-300">
                             Email
-                            <input
+                            <Input
                                 {...register("email")}
                                 type="email"
                                 autoComplete="email"
                                 placeholder="name@example.com"
-                                className={inputClasses}
                             />
                             {errors.email && (
                                 <span className="text-xs font-normal text-red-400">
@@ -87,7 +83,7 @@ export const AuthForm = ({ mode, onSubmit }: AuthFormProps) => {
 
                         <label className="grid gap-2 text-sm font-medium text-zinc-300">
                             Password
-                            <input
+                            <Input
                                 {...register("password")}
                                 type="password"
                                 autoComplete={
@@ -98,7 +94,6 @@ export const AuthForm = ({ mode, onSubmit }: AuthFormProps) => {
                                 minLength={8}
                                 maxLength={72}
                                 placeholder="••••••••"
-                                className={inputClasses}
                             />
                             {errors.password && (
                                 <span className="text-xs font-normal text-red-400">

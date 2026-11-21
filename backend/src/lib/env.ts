@@ -6,7 +6,7 @@ const envSchema = z.object({
     PORT: z.coerce.string(),
     NODE_ENV: z.string().default("development"),
     SECRET_KEY: z.string(),
-    RESEND_API_KEY: z.string(),
+    RESEND_API_KEY: z.string().default("Exchange <onboarding@resend.dev>"),
     EMAIL_FROM: z.string(),
     ACCESS_TOKEN_SECRET: z.string(),
     REFRESH_TOKEN_SECRET: z.string(),

@@ -3,12 +3,15 @@ import * as z from "zod";
 export const authSchema = (mode: "signin" | "signup") =>
     z
         .object({
-            username: z
-                .string()
-                .trim()
-                .lowercase()
-                .min(3, "username must be atlest 3 characters long")
-                .max(20),
+            username:
+                mode == "signup"
+                    ? z
+                        .string()
+                        .trim()
+                        .lowercase()
+                        .min(3, "username must be atlest 3 characters long")
+                        .max(20)
+                    : z.string().optional(),
             email: z.email("Enter a valid email address"),
             password: z
                 .string()

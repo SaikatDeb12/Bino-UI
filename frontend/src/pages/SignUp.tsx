@@ -1,4 +1,5 @@
 import { AuthForm } from "@/components/AuthForm";
+import { api } from "@/lib/axios";
 
 export const SignUp = () => {
     return (
@@ -6,6 +7,9 @@ export const SignUp = () => {
             mode="signup"
             onSubmit={async (data) => {
                 console.log(data);
+                //got the form data
+                const res = await api.post("/signup", data);
+                console.log(res.data);
             }}
         />
     );

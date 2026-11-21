@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { signUpSchema } from "../utils/auth";
+import { signInSchema, signUpSchema } from "../utils/auth";
 import { UserModel } from "../models/user";
 import bcrypt from "bcryptjs";
 import { clearSession, createSession } from "../utils/session";
@@ -50,7 +50,7 @@ export const authController = {
     signin: async (req: Request, res: Response) => {
         try {
             const body = req.body;
-            const { success, error, data } = signUpSchema.safeParse(body);
+            const { success, error, data } = signInSchema.safeParse(body);
             if (!success) {
                 return res.status(400).json({
                     message: "invalid request body",
@@ -58,9 +58,9 @@ export const authController = {
                 });
             }
 
-            const { username, password } = data;
+            const { email, password } = data;
             const user = await UserModel.findOne({
-                username: username,
+                email: email,
             });
             if (!user) {
                 return res.status(404).json({
@@ -81,7 +81,7 @@ export const authController = {
             createSession(res, user._id.toString());
 
             return res.status(200).json({
-                message: "login successfull",
+                message: "login successful",
             });
         } catch (error) {
             console.log("signup error : ", error);

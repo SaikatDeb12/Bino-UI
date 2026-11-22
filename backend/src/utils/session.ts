@@ -38,5 +38,4 @@ export const createSession = async (res: Response, userId: string) => {
 export const clearSession = (res: Response) => {
     res.clearCookie(ACCESS_TOKEN, cookieOptions);
     res.clearCookie(REFRESH_TOKEN, cookieOptions);
-    res.clearCookie("session", cookieOptions);
 };

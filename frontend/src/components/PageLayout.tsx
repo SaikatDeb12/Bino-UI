@@ -5,7 +5,7 @@ export const PageLayout = () => {
     return (
         <>
             <Navbar />
-            <main className="shell py-10 sm:py-16">
+            <main>
                 <Outlet />
             </main>
         </>

@@ -6,17 +6,10 @@ import {
     Zap,
     BarChart3,
 } from "lucide-react";
+import { useAuthStore } from "@/store/useAuthStore";
+import { Navbar } from "@/components/Navbar";
 
 export default function Home() {
-    const tickerData = [
-        { pair: "BTC/USDT", price: "64,231.50", change: "+2.45%", isUp: true },
-        { pair: "ETH/USDT", price: "3,142.10", change: "+1.82%", isUp: true },
-        { pair: "SOL/USDT", price: "145.22", change: "-0.54%", isUp: false },
-        { pair: "BNB/USDT", price: "592.40", change: "+3.10%", isUp: true },
-        { pair: "XRP/USDT", price: "0.5821", change: "-1.20%", isUp: false },
-        { pair: "ADA/USDT", price: "0.4512", change: "+0.95%", isUp: true },
-    ];
-
     const popularMarkets = [
         {
             pair: "BTC/USDT",
@@ -44,84 +37,19 @@ export default function Home() {
         },
     ];
 
+    // const tickerData = [
+    //     { pair: "BTC/USDT", price: "64,231.50", change: "+2.45%", isUp: true },
+    //     { pair: "ETH/USDT", price: "3,142.10", change: "+1.82%", isUp: true },
+    //     { pair: "SOL/USDT", price: "145.22", change: "-0.54%", isUp: false },
+    //     { pair: "BNB/USDT", price: "592.40", change: "+3.10%", isUp: true },
+    //     { pair: "XRP/USDT", price: "0.5821", change: "-1.20%", isUp: false },
+    //     { pair: "ADA/USDT", price: "0.4512", change: "+0.95%", isUp: true },
+    // ];
+
+    const isUser = useAuthStore((state) => state.user);
     return (
         <div className="min-h-screen bg-zinc-950 text-zinc-100 overflow-x-hidden">
-            <nav className="sticky top-0 z-50 border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-xl">
-                <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center gap-2">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-lime-400 text-lg font-bold text-zinc-950">
-                            E
-                        </div>
-                        <span className="text-xl font-bold tracking-tight text-white">
-                            Exchange<span className="text-lime-400">.</span>
-                        </span>
-                    </div>
-
-                    <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
-                        <Link
-                            to="#"
-                            className="hover:text-lime-400 transition-colors"
-                        >
-                            Markets
-                        </Link>
-                        <Link
-                            to="#"
-                            className="hover:text-lime-400 transition-colors"
-                        >
-                            Trade
-                        </Link>
-                        <Link
-                            to="#"
-                            className="hover:text-lime-400 transition-colors"
-                        >
-                            Earn
-                        </Link>
-                        <Link
-                            to="#"
-                            className="hover:text-lime-400 transition-colors"
-                        >
-                            Support
-                        </Link>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <Link
-                            to="/signin"
-                            className="hidden text-sm font-medium text-zinc-300 hover:text-white transition-colors sm:block"
-                        >
-                            Log in
-                        </Link>
-                        <Link
-                            to="/signup"
-                            className="rounded-lg bg-lime-400 px-4 py-2 text-sm font-semibold text-zinc-950 transition-all hover:bg-lime-300 focus:outline-none focus:ring-2 focus:ring-lime-500/50"
-                        >
-                            Get Started
-                        </Link>
-                    </div>
-                </div>
-            </nav>
-
-            <div className="border-b border-zinc-800/50 bg-zinc-900/30 py-2.5 overflow-hidden">
-                <div className="flex animate-[marquee_30s_linear_infinite] whitespace-nowrap">
-                    {[...tickerData, ...tickerData].map((item, i) => (
-                        <div
-                            key={i}
-                            className="flex items-center gap-2 px-6 text-sm"
-                        >
-                            <span className="font-semibold text-zinc-300">
-                                {item.pair}
-                            </span>
-                            <span className="text-zinc-400">${item.price}</span>
-                            <span
-                                className={`font-medium ${item.isUp ? "text-lime-400" : "text-red-400"}`}
-                            >
-                                {item.change}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
+            <Navbar />
             <main>
                 <section className="relative mx-auto max-w-7xl px-4 pt-20 pb-24 sm:px-6 lg:px-8 lg:pt-32">
                     <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 -z-10">
@@ -129,9 +57,8 @@ export default function Home() {
                     </div>
 
                     <div className="grid gap-12 lg:grid-cols-2 lg:gap-8 items-center">
-                        {/* Hero Text */}
                         <div className="max-w-2xl">
-                            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-lime-500/30 bg-lime-500/10 px-3 py-1 text-sm text-lime-400">
+                            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-lime-500/30 bg-lime-500/10 px-3 py-1 text-sm text-lime-300">
                                 <Zap className="h-4 w-4" />
                                 <span>Trade with zero fees for 30 days</span>
                             </div>
@@ -148,13 +75,23 @@ export default function Home() {
                             </p>
 
                             <div className="mt-10 flex flex-col sm:flex-row gap-4">
-                                <Link
-                                    to="/signup"
-                                    className="inline-flex items-center justify-center gap-2 rounded-lg bg-lime-400 px-6 py-3 text-base font-semibold text-zinc-950 transition-all hover:bg-lime-300 focus:outline-none focus:ring-2 focus:ring-lime-500/50"
-                                >
-                                    Create Account
-                                    <ArrowRight className="h-5 w-5" />
-                                </Link>
+                                {isUser ? (
+                                    <Link
+                                        to="/profile"
+                                        className="inline-flex items-center justify-center gap-2 rounded-lg bg-lime-300 px-6 py-3 text-base font-semibold text-zinc-950 transition-all hover:bg-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-500/50"
+                                    >
+                                        Welcome
+                                        <ArrowRight className="h-5 w-5" />
+                                    </Link>
+                                ) : (
+                                    <Link
+                                        to="/signup"
+                                        className="inline-flex items-center justify-center gap-2 rounded-lg bg-lime-300 px-6 py-3 text-base font-semibold text-zinc-950 transition-all hover:bg-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-500/50"
+                                    >
+                                        Create Account
+                                        <ArrowRight className="h-5 w-5" />
+                                    </Link>
+                                )}
                                 <Link
                                     to="/stocks"
                                     className="inline-flex items-center justify-center rounded-lg border border-zinc-700 bg-zinc-900/50 px-6 py-3 text-base font-semibold text-zinc-300 transition-all hover:bg-zinc-800 hover:text-white"
@@ -206,14 +143,13 @@ export default function Home() {
                                         <p className="text-2xl font-bold text-white">
                                             $64,231.50
                                         </p>
-                                        <p className="text-sm font-medium text-lime-400">
+                                        <p className="text-sm font-medium text-lime-300">
                                             +2.45%
                                         </p>
                                     </div>
                                 </div>
 
                                 <div className="relative h-48 w-full rounded-lg overflow-hidden border border-zinc-800/50 bg-zinc-950/50 flex items-end p-2 gap-1">
-                                    {/* Simple mock bars to simulate a chart */}
                                     {[
                                         40, 60, 45, 70, 55, 80, 65, 90, 75, 100,
                                         85, 95,
@@ -233,7 +169,7 @@ export default function Home() {
                                 </div>
 
                                 <div className="mt-6 grid grid-cols-2 gap-4">
-                                    <button className="rounded-lg bg-lime-400 py-2.5 text-sm font-semibold text-zinc-950 hover:bg-lime-300 transition-colors">
+                                    <button className="rounded-lg bg-lime-300 py-2.5 text-sm font-semibold text-zinc-950 hover:bg-lime-400 transition-colors">
                                         Buy BTC
                                     </button>
                                     <button className="rounded-lg bg-zinc-800 py-2.5 text-sm font-semibold text-white hover:bg-zinc-700 transition-colors">
@@ -244,7 +180,7 @@ export default function Home() {
 
                             <div className="absolute -bottom-6 -right-6 rounded-xl border border-zinc-800 bg-zinc-900 p-4 shadow-xl backdrop-blur-md hidden sm:block">
                                 <div className="flex items-center gap-3">
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-lime-500/20 text-lime-400">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-lime-500/20 text-lime-300">
                                         <TrendingUp className="h-5 w-5" />
                                     </div>
                                     <div>
@@ -274,7 +210,7 @@ export default function Home() {
                             </div>
                             <Link
                                 to="/stocks"
-                                className="text-sm font-medium text-lime-400 hover:text-lime-300 flex items-center gap-1"
+                                className="text-sm font-medium text-lime-300 hover:text-lime-300 flex items-center gap-1"
                             >
                                 View all <ArrowRight className="h-4 w-4" />
                             </Link>
@@ -314,7 +250,7 @@ export default function Home() {
                                                 {market.price}
                                             </td>
                                             <td
-                                                className={`py-4 font-medium ${market.change.startsWith("+") ? "text-lime-400" : "text-red-400"}`}
+                                                className={`py-4 font-medium ${market.change.startsWith("+") ? "text-lime-300" : "text-red-400"}`}
                                             >
                                                 {market.change}
                                             </td>
@@ -350,8 +286,9 @@ export default function Home() {
                         </div>
 
                         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                            {/* Feature 1 */}
                             <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-8 hover:border-zinc-700 transition-colors">
-                                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-lime-500/10 text-lime-400">
+                                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-lime-500/10 text-lime-300">
                                     <ShieldCheck className="h-6 w-6" />
                                 </div>
                                 <h3 className="text-xl font-semibold text-white">
@@ -364,9 +301,8 @@ export default function Home() {
                                 </p>
                             </div>
 
-                            {/* Feature 2 */}
                             <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-8 hover:border-zinc-700 transition-colors">
-                                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-lime-500/10 text-lime-400">
+                                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-lime-500/10 text-lime-300">
                                     <Zap className="h-6 w-6" />
                                 </div>
                                 <h3 className="text-xl font-semibold text-white">
@@ -379,9 +315,8 @@ export default function Home() {
                                 </p>
                             </div>
 
-                            {/* Feature 3 */}
                             <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-8 hover:border-zinc-700 transition-colors">
-                                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-lime-500/10 text-lime-400">
+                                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-lime-500/10 text-lime-300">
                                     <BarChart3 className="h-6 w-6" />
                                 </div>
                                 <h3 className="text-xl font-semibold text-white">
@@ -414,7 +349,7 @@ export default function Home() {
                         <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
                             <Link
                                 to="/signup"
-                                className="inline-flex items-center justify-center gap-2 rounded-lg bg-lime-400 px-8 py-3 text-base font-semibold text-zinc-950 transition-all hover:bg-lime-300"
+                                className="inline-flex items-center justify-center gap-2 rounded-lg bg-lime-300 px-8 py-3 text-base font-semibold text-zinc-950 transition-all hover:bg-lime-400"
                             >
                                 Get Started Now
                                 <ArrowRight className="h-5 w-5" />
@@ -427,11 +362,11 @@ export default function Home() {
             <footer className="border-t border-zinc-800/50 bg-zinc-950 py-12">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
                     <div className="flex items-center gap-2">
-                        <div className="flex h-6 w-6 items-center justify-center rounded bg-lime-400 text-xs font-bold text-zinc-950">
+                        <div className="flex h-6 w-6 items-center justify-center rounded bg-lime-300 text-xs font-bold text-zinc-950">
                             E
                         </div>
                         <span className="text-lg font-bold text-white">
-                            Exchange<span className="text-lime-400">.</span>
+                            Exchange<span className="text-lime-300">.</span>
                         </span>
                     </div>
                     <p className="text-sm text-zinc-500">

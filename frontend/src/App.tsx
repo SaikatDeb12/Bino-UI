@@ -5,11 +5,12 @@ import { SignUp } from "./pages/SignUp";
 import Home from "./pages/Home";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
+import { Profile } from "./pages/Profile";
 
 export const App = () => {
     const checking = useAuthStore((state) => state.checking);
     const checkSession = useAuthStore((state) => state.checkSession);
-    const sessionError = useAuthStore((state) => state.sessionError);
+    // const sessionError = useAuthStore((state) => state.sessionError);
 
     useEffect(() => {
         void checkSession();
@@ -20,17 +21,13 @@ export const App = () => {
                 {checking ? (
                     <p>Restoring session...</p>
                 ) : (
-                    <>
-                        {sessionError && (
-                            <p style={{ color: "red" }}>{sessionError}</p>
-                        )}
-                    </>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/signin" element={<SignIn />} />
+                        <Route path="/signup" element={<SignUp />} />
+                        <Route path="/profile" element={<Profile />} />
+                    </Routes>
                 )}
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/signin" element={<SignIn />} />
-                    <Route path="/signup" element={<SignUp />} />
-                </Routes>
             </Router>
         </div>
     );

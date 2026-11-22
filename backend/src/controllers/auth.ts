@@ -148,7 +148,7 @@ export const authController = {
             });
         }
     },
-    logout: async (req: Request, res: Response) => {
+    logout: async (res: Response) => {
         clearSession(res);
         return res.status(200).json({
             message: "logged out successfully",

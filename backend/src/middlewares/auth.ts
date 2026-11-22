@@ -10,14 +10,16 @@ export function authMiddleware(
 ) {
     try {
         const token = req.cookies[ACCESS_TOKEN];
-        console.log(token);
 
         if (!token) {
-            return res.status(404).json({ message: "token not found" });
+            return res.status(401).json({ message: "token not found" });
         }
 
-        const decoded = jwt.verify(token, env.ACCESS_TOKEN_SECRET);
-        req.userId = (decoded as JwtPayload).userId;
+        const decoded = jwt.verify(
+            token,
+            env.ACCESS_TOKEN_SECRET,
+        ) as JwtPayload;
+        req.userId = decoded.userId;
         next();
     } catch {
         return res.status(401).json({

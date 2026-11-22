@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { authSchema, type AuthFormValues } from "@/schema/auth.schema";
 import { Link, Navigate, useNavigate } from "react-router";
 import { Input } from "./ui/input";
-import { Navbar } from "./Navbar";
 import { useAuthStore } from "@/store/useAuthStore";
 
 type AuthFormProps = {
@@ -157,7 +156,7 @@ export const AuthForm = ({ mode, onSubmit }: AuthFormProps) => {
                             <button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="mt-2 inline-flex w-full cursor-pointer items-center justify-center rounded-lg bg-lime-300 px-4 py-2.5 text-sm font-semibold text-zinc-950 transition-all hover:bg-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-500/50 focus:ring-offset-2 focus:ring-offset-zinc-900 disabled:cursor-not-allowed disabled:opacity-60"
+                                className="mt-2 inline-flex w-full cursor-pointer items-center justify-center rounded-lg bg-lime-300 px-4 py-2.5 text-sm font-semibold text-zinc-950 transition-all hover:bg-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-500/50 focus:ring-offset-2 focus:ring-offset-zinc-900 disabled:opacity-60"
                             >
                                 {isSubmitting
                                     ? "Please wait..."

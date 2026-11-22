@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { signInSchema, signUpSchema } from "../utils/auth";
 import { UserModel } from "../models/user";
 import bcrypt from "bcryptjs";
-import { clearSession, createSession } from "../utils/session";
+import { clearSession, createSession, REFRESH_TOKEN } from "../utils/session";
 import jwt from "jsonwebtoken";
 import { env } from "../lib/env";
 
@@ -93,7 +93,7 @@ export const authController = {
     refreshToken: async (req: Request, res: Response) => {
         try {
             // if exists or not
-            const refreshToken = req.cookies["REFRESH_TOKEN"];
+            const refreshToken = req.cookies[REFRESH_TOKEN];
             if (!refreshToken) {
                 return res.status(404).json({
                     message: "refresh token is missing",
@@ -106,7 +106,7 @@ export const authController = {
                 env.REFRESH_TOKEN_SECRET,
             ) as jwt.JwtPayload;
 
-            const user = await UserModel.findOne(decoded.userId);
+            const user = await UserModel.findById(decoded.userId);
             if (!user) {
                 // remove the invalid tokens
                 clearSession(res);
@@ -121,6 +121,7 @@ export const authController = {
                 message: "tokens refreshed successfully",
             });
         } catch (error) {
+            clearSession(res);
             console.log("error refreshing tokens : ", error);
             return res.status(500).json({
                 mesage: "failed to refresh tokens",
@@ -134,7 +135,7 @@ export const authController = {
                 "-password",
             );
             if (!user) {
-                return res.status(404).json({
+                return res.status(401).json({
                     message: "user not found",
                 });
             }

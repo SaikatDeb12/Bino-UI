@@ -127,12 +127,6 @@ export const authController = {
             });
         }
     },
-    logout: async (req: Request, res: Response) => {
-        clearSession(res);
-        return res.status(200).json({
-            message: "logged out successfully",
-        });
-    },
     profile: async (req: Request, res: Response) => {
         try {
             // select and not populate(for getting details through ref)
@@ -148,6 +142,16 @@ export const authController = {
                 message: "user found",
                 user: user,
             });
-        } catch (error) { }
+        } catch (error) {
+            return res.status(500).json({
+                message: "failed to fetch user's profile",
+            });
+        }
+    },
+    logout: async (req: Request, res: Response) => {
+        clearSession(res);
+        return res.status(200).json({
+            message: "logged out successfully",
+        });
     },
 };

@@ -1,9 +1,9 @@
 import { env } from "../lib/env";
-import type { Request, Response, CookieOptions } from "express";
+import type { Response, CookieOptions } from "express";
 import jwt from "jsonwebtoken";
 
-export const ACCESS_TOKEN = "session";
-export const REFRESH_TOKEN = "session";
+export const ACCESS_TOKEN = "accessToken";
+export const REFRESH_TOKEN = "refreshToken";
 
 const cookieOptions: CookieOptions = {
     httpOnly: true,
@@ -38,4 +38,5 @@ export const createSession = async (res: Response, userId: string) => {
 export const clearSession = (res: Response) => {
     res.clearCookie(ACCESS_TOKEN, cookieOptions);
     res.clearCookie(REFRESH_TOKEN, cookieOptions);
+    res.clearCookie("session", cookieOptions);
 };

@@ -10,6 +10,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { Navbar } from "@/components/Navbar";
 
 export default function Home() {
+    const isUser = useAuthStore((state) => state.user);
     const popularMarkets = [
         {
             pair: "BTC/USDT",
@@ -46,7 +47,6 @@ export default function Home() {
     //     { pair: "ADA/USDT", price: "0.4512", change: "+0.95%", isUp: true },
     // ];
 
-    const isUser = useAuthStore((state) => state.user);
     return (
         <div className="min-h-screen bg-zinc-950 text-zinc-100 overflow-x-hidden">
             <Navbar />

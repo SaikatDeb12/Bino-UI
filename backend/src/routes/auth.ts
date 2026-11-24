@@ -8,6 +8,6 @@ export const authRouter = Router();
 authRouter.post("/signup", signup);
 authRouter.post("/signin", signin);
 authRouter.post("/refresh", refreshToken);
-authRouter.post("/logout", logout);
+authRouter.get("/logout", logout);
 
 authRouter.get("/profile", authMiddleware, profile);

@@ -149,10 +149,11 @@ export const authController = {
             });
         }
     },
-    logout: async (res: Response) => {
+
+    // blunder :
+    // logout: async (res: Response) => {
+    logout: async (req: Request, res: Response) => {
         clearSession(res);
-        return res.status(200).json({
-            message: "logged out successfully",
-        });
+        return res.status(200).json({ message: "Logged out" });
     },
 };

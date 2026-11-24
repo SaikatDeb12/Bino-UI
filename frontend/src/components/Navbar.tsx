@@ -1,8 +1,25 @@
+import { api } from "@/lib/axios";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Link, useNavigate } from "react-router";
 export const Navbar = () => {
     const navigate = useNavigate();
     const isUser = useAuthStore((state) => state.user);
+    const clearUser = useAuthStore((state) => state.clearUser);
+
+    let initials = "";
+    if (isUser) {
+        initials = isUser.username.substring(0, 2).toUpperCase();
+    }
+
+    const handleLogout = async () => {
+        try {
+            await api.post("/logout");
+            clearUser();
+            navigate("/", { replace: true });
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
+    };
     return (
         <nav className="sticky top-0 z-50 border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-xl">
             <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
@@ -63,16 +80,18 @@ export const Navbar = () => {
                     <div className="flex items-center gap-4">
                         <Link
                             to="/profile"
-                            className="hidden text-sm font-medium text-zinc-300 hover:text-white transition-colors sm:block"
+                            className="hidden sm:flex items-center justify-center"
                         >
-                            {`${isUser.username}`}
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-lime-300 text-xl font-bold text-zinc-950 shadow-[0_0_20px_rgba(163,230,53,0.3)]">
+                                {initials}
+                            </div>
                         </Link>
-                        <Link
-                            to="/stocks"
+                        <button
+                            onClick={handleLogout}
                             className="rounded-lg bg-lime-300 px-4 py-2 text-sm font-semibold text-zinc-950 transition-all hover:bg-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-500/50"
                         >
-                            Stocks
-                        </Link>
+                            Logout
+                        </button>
                     </div>
                 )}
             </div>

@@ -21,6 +21,7 @@ type AuthStore = {
     checking: boolean;
     sessionError: string | null;
     setUser: (user: User) => void;
+    clearUser: () => void;
     fetchUser: () => Promise<User>;
     checkSession: () => Promise<void>;
     // setCheck: (check: boolean) => void;
@@ -43,6 +44,8 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     sessionError: null,
 
     setUser: (user) => set({ user, sessionError: null }),
+
+    clearUser: () => set({ user: null, sessionError: null }),
 
     fetchUser: async () => {
         const res = await api.get<ProfileResponse>("/profile");

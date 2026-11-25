@@ -8,6 +8,7 @@ import { Profile } from "./pages/Profile";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "./hooks/useAuth";
 import { CURRENT_USER_QUERY_KEY } from "./lib/auth";
+import { Button } from "./components/ui/button";
 
 export const App = () => {
     const queryClient = useQueryClient();
@@ -25,15 +26,23 @@ export const App = () => {
     }, [queryClient]);
 
     if (isPending) {
-        return <p>Restoring session</p>;
+        return (
+            <div className="h-screen w-full flex flex-col justify-center items-center p-8 text-white">
+                <p>Restoring session...</p>
+            </div>
+        );
     }
 
     if (isError && data === undefined) {
         return (
-            <div className="p-8 text-white">
+            <div className="h-screen w-full flex flex-col justify-center items-center p-8 text-white">
                 <p>Failed to restore session: {error.message}</p>
-
-                <button onClick={() => void refetch()}>Retry</button>
+                <Button
+                    onClick={() => void refetch()}
+                    className="p-4 bg-lime-300 rounded-2xl text-black m-4 hover:cursor-pointer"
+                >
+                    Retry
+                </Button>
             </div>
         );
     }

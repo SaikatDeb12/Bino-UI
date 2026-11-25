@@ -30,7 +30,9 @@ export const AuthForm = ({ mode, onSubmit, submitError }: AuthFormProps) => {
     const { isPending, data: isUser } = useCurrentUser();
 
     if (isPending) {
-        return <p>Restoring session...</p>;
+        <div className="h-screen w-full flex flex-col justify-center items-center p-8 text-white">
+            <p>Restoring session...</p>
+        </div>;
     }
 
     if (isUser) {

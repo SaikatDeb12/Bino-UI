@@ -3,14 +3,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { authSchema, type AuthFormValues } from "@/schema/auth.schema";
 import { Link, Navigate, useNavigate } from "react-router";
 import { Input } from "./ui/input";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useCurrentUser } from "@/hooks/useAuth";
 
 type AuthFormProps = {
     mode: "signin" | "signup";
     onSubmit: (data: AuthFormValues) => void | Promise<void>;
+    submitError?: string | null;
 };
 
-export const AuthForm = ({ mode, onSubmit }: AuthFormProps) => {
+export const AuthForm = ({ mode, onSubmit, submitError }: AuthFormProps) => {
     const {
         register,
         handleSubmit,
@@ -26,9 +27,14 @@ export const AuthForm = ({ mode, onSubmit }: AuthFormProps) => {
 
     const isSignup = mode === "signup";
     const navigate = useNavigate();
-    const isUser = useAuthStore((state) => state.user);
+    const { isPending, data: isUser } = useCurrentUser();
+
+    if (isPending) {
+        return <p>Restoring session...</p>;
+    }
+
     if (isUser) {
-        return <Navigate to={"/"} />;
+        return <Navigate to="/" replace />;
     }
 
     return (
@@ -153,6 +159,11 @@ export const AuthForm = ({ mode, onSubmit }: AuthFormProps) => {
                                 )}
                             </label>
 
+                            {submitError && (
+                                <p className="text-sm text-red-400">
+                                    {submitError}
+                                </p>
+                            )}
                             <button
                                 type="submit"
                                 disabled={isSubmitting}

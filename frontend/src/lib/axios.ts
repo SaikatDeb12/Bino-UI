@@ -5,7 +5,6 @@ export const api = axios.create({
     withCredentials: true,
 });
 
-// avoiding interceptor, request loops
 const refreshApi = axios.create({
     baseURL: "http://localhost:8000/api/v1/auth",
     withCredentials: true,
@@ -13,8 +12,11 @@ const refreshApi = axios.create({
 
 let refreshPromise: Promise<void> | null = null;
 
+const excludedEndpoints = ["/signin", "/signup", "/logout", "/refresh"];
+
 api.interceptors.response.use(
     (response) => response,
+
     async (error) => {
         if (!isAxiosError(error)) {
             return Promise.reject(error);
@@ -22,11 +24,17 @@ api.interceptors.response.use(
 
         const originalRequest = error.config;
 
+        const requestUrl = originalRequest?.url?.split("?")[0] ?? "";
+
+        const shouldSkipRefresh = excludedEndpoints.some((endpoint) =>
+            requestUrl.endsWith(endpoint),
+        );
+
         if (
             error.response?.status === 401 &&
             originalRequest &&
             !originalRequest._retry &&
-            !originalRequest.url?.includes("/refresh")
+            !shouldSkipRefresh
         ) {
             originalRequest._retry = true;
 
@@ -45,12 +53,15 @@ api.interceptors.response.use(
                 return api(originalRequest);
             } catch (refreshError) {
                 window.dispatchEvent(new Event("auth:expired"));
-                return Promise.reject(refreshError);
+
+                // return the original error.
+                return Promise.reject(error);
             }
         }
 
-        error.message =
-            error.response?.data?.message ?? "couldn't connect to server";
+        const data = error.response?.data as { message?: string } | undefined;
+
+        error.message = data?.message ?? "Couldn't connect to server";
 
         return Promise.reject(error);
     },

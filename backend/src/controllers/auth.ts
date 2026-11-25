@@ -35,7 +35,7 @@ export const authController = {
                 password: hashedPassword,
             });
 
-            createSession(res, newUser._id.toString());
+            await createSession(res, newUser._id.toString());
 
             return res.status(201).json({
                 message: "profile created successfully",
@@ -78,7 +78,7 @@ export const authController = {
                 });
             }
 
-            createSession(res, user._id.toString());
+            await createSession(res, user._id.toString());
 
             return res.status(200).json({
                 message: "login successful",
@@ -95,7 +95,8 @@ export const authController = {
             // if exists or not
             const refreshToken = req.cookies[REFRESH_TOKEN];
             if (!refreshToken) {
-                return res.status(404).json({
+                clearSession(res);
+                return res.status(401).json({
                     message: "refresh token is missing",
                 });
             }
@@ -116,12 +117,17 @@ export const authController = {
             }
 
             //generate new access, refresh token
-            createSession(res, user._id.toString());
+            await createSession(res, user._id.toString());
             return res.status(200).json({
                 message: "tokens refreshed successfully",
             });
         } catch (error) {
             clearSession(res);
+            if (error instanceof jwt.JsonWebTokenError) {
+                return res.status(401).json({
+                    message: "refresh token is invalid or expired",
+                });
+            }
             console.log("error refreshing tokens : ", error);
             return res.status(500).json({
                 mesage: "failed to refresh tokens",

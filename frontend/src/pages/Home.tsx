@@ -6,11 +6,11 @@ import {
     Zap,
     BarChart3,
 } from "lucide-react";
-import { useAuthStore } from "@/store/useAuthStore";
 import { Navbar } from "@/components/Navbar";
+import { useCurrentUser } from "@/hooks/useAuth";
 
 export default function Home() {
-    const isUser = useAuthStore((state) => state.user);
+    const { data: isUser } = useCurrentUser();
     const popularMarkets = [
         {
             pair: "BTC/USDT",

@@ -1,25 +1,24 @@
-import { api } from "@/lib/axios";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useCurrentUser, useLogout } from "@/hooks/useAuth";
 import { Link, useNavigate } from "react-router";
 export const Navbar = () => {
     const navigate = useNavigate();
-    const isUser = useAuthStore((state) => state.user);
-    const clearUser = useAuthStore((state) => state.clearUser);
+    const { data: isUser } = useCurrentUser();
+    const logout = useLogout();
 
-    let initials = "";
-    if (isUser) {
-        initials = isUser.username.substring(0, 2).toUpperCase();
-    }
+    const initials = isUser
+        ? isUser.username.substring(0, 2).toUpperCase()
+        : "";
 
     const handleLogout = async () => {
         try {
-            await api.post("/logout");
-            clearUser();
+            await logout.mutateAsync();
+
             navigate("/", { replace: true });
         } catch (error) {
             console.error("Logout failed:", error);
         }
     };
+
     return (
         <nav className="sticky top-0 z-50 border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-xl">
             <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
@@ -88,9 +87,10 @@ export const Navbar = () => {
                         </Link>
                         <button
                             onClick={handleLogout}
-                            className="rounded-lg bg-lime-300 px-4 py-2 text-sm font-semibold text-zinc-950 transition-all hover:bg-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-500/50"
+                            disabled={logout.isPending}
+                            className="rounded-lg bg-lime-300 px-4 py-2 text-sm font-semibold text-zinc-950 transition-all hover:bg-lime-400 disabled:opacity-60"
                         >
-                            Logout
+                            {logout.isPending ? "Logging out..." : "Logout"}
                         </button>
                     </div>
                 )}

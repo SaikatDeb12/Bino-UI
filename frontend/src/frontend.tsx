@@ -8,11 +8,26 @@
 import { StrictMode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { App } from "./App";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 5 * 60 * 1000,
+            retry: false,
+        },
+        mutations: {
+            retry: false,
+        },
+    },
+});
 
 const elem = document.getElementById("root")!;
 const app = (
     <StrictMode>
-        <App />
+        <QueryClientProvider client={queryClient}>
+            <App />
+        </QueryClientProvider>
     </StrictMode>
 );
 

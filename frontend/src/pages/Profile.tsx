@@ -1,4 +1,3 @@
-import { useAuthStore } from "@/store/useAuthStore";
 import { Navigate, Link, useNavigate } from "react-router";
 import {
     User,
@@ -10,29 +9,28 @@ import {
     Settings,
     LogOut,
 } from "lucide-react";
-import { api } from "@/lib/axios";
+import { useCurrentUser, useLogout } from "@/hooks/useAuth";
 
 export const Profile = () => {
-    const isUser = useAuthStore((state) => state.user);
-    const clearUser = useAuthStore((state) => state.clearUser);
+    const { data: isUser } = useCurrentUser();
+    const logout = useLogout();
     const navigate = useNavigate();
 
     if (!isUser) {
-        return <Navigate to={"/"} replace />;
+        return <Navigate to="/" replace />;
     }
 
     const initials = isUser.username.substring(0, 2).toUpperCase();
 
     const handleLogout = async () => {
         try {
-            await api.post("/logout");
-            clearUser();
+            await logout.mutateAsync();
+
             navigate("/", { replace: true });
         } catch (error) {
             console.error("Logout failed:", error);
         }
     };
-
     return (
         <div className="min-h-screen bg-zinc-950 text-zinc-100 py-12 px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-5xl space-y-8">
@@ -93,10 +91,11 @@ export const Profile = () => {
 
                         <button
                             onClick={handleLogout}
-                            className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-semibold text-red-400 transition-colors hover:bg-red-500/20"
+                            disabled={logout.isPending}
+                            className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-semibold text-red-400 transition-colors hover:bg-red-500/20 disabled:opacity-60"
                         >
                             <LogOut className="h-4 w-4" />
-                            Sign Out
+                            {logout.isPending ? "Signing out..." : "Sign Out"}
                         </button>
                     </div>
 

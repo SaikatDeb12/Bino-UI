@@ -1,28 +1,34 @@
 import { AuthForm } from "@/components/AuthForm";
-import { api } from "@/lib/axios";
-import { useAuthStore } from "@/store/useAuthStore";
 import { useNavigate } from "react-router";
 
+import { useSignIn } from "@/hooks/useAuth";
+import { getApiErrorMessage } from "@/lib/auth";
+import type { AuthFormValues } from "@/schema/auth.schema";
+
 export const SignIn = () => {
-    const fetchUser = useAuthStore((state) => state.fetchUser);
     const navigate = useNavigate();
+    const signIn = useSignIn();
+
+    const handleSignIn = async (data: AuthFormValues) => {
+        try {
+            await signIn.mutateAsync({
+                email: data.email,
+                password: data.password,
+            });
+
+            navigate("/", { replace: true });
+        } catch (error) {
+            console.log("signin failed with error : ", error);
+        }
+    };
+
     return (
         <AuthForm
             mode="signin"
-            onSubmit={async (data) => {
-                console.log(data);
-                try {
-                    await api.post("/signin", {
-                        email: data.email,
-                        password: data.password,
-                    });
-                    // console.log(res.data);
-                    await fetchUser();
-                    navigate("/");
-                } catch (error) {
-                    console.log("signin failed with error", error);
-                }
-            }}
+            onSubmit={handleSignIn}
+            submitError={
+                signIn.isError ? getApiErrorMessage(signIn.error) : null
+            }
         />
     );
 };

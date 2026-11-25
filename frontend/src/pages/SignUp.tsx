@@ -1,20 +1,35 @@
 import { AuthForm } from "@/components/AuthForm";
-import { api } from "@/lib/axios";
+import { useNavigate } from "react-router";
+
+import { useSignUp } from "@/hooks/useAuth";
+import { getApiErrorMessage } from "@/lib/auth";
+import type { AuthFormValues } from "@/schema/auth.schema";
 
 export const SignUp = () => {
+    const navigate = useNavigate();
+    const signUp = useSignUp();
+
+    const handleSignUp = async (data: AuthFormValues) => {
+        try {
+            await signUp.mutateAsync({
+                username: data.username,
+                email: data.email,
+                password: data.password,
+            });
+
+            navigate("/", { replace: true });
+        } catch (error) {
+            console.log("signin failed with error : ", error);
+        }
+    };
+
     return (
         <AuthForm
             mode="signup"
-            onSubmit={async (data) => {
-                try {
-                    console.log(data);
-                    //got the form data
-                    const res = await api.post("/signup", data);
-                    console.log(res.data);
-                } catch (error) {
-                    console.log("error while signup: ", error);
-                }
-            }}
+            onSubmit={handleSignUp}
+            submitError={
+                signUp.isError ? getApiErrorMessage(signUp.error) : null
+            }
         />
     );
 };

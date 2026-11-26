@@ -10,17 +10,24 @@ import {
     LogOut,
 } from "lucide-react";
 import { useCurrentUser, useLogout } from "@/hooks/useAuth";
+import { NavbarMini } from "@/components/NavbarMini";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export const Profile = () => {
-    const { data: isUser } = useCurrentUser();
+    const user = useAuthStore((state) => state.user);
     const logout = useLogout();
     const navigate = useNavigate();
+    const { isLoading } = useCurrentUser();
 
-    if (!isUser) {
+    if (isLoading) {
+        return <div>Loading profile...</div>;
+    }
+
+    if (!user) {
         return <Navigate to="/" replace />;
     }
 
-    const initials = isUser.username.substring(0, 2).toUpperCase();
+    const initials = user.username.substring(0, 2).toUpperCase();
 
     const handleLogout = async () => {
         try {
@@ -33,48 +40,7 @@ export const Profile = () => {
     };
     return (
         <>
-            <nav className="sticky top-0 z-50 border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-xl">
-                <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center gap-2">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-lime-300 text-lg font-bold text-zinc-950">
-                            E
-                        </div>
-                        <span
-                            className="text-xl font-bold tracking-tight text-white hover:cursor-pointer"
-                            onClick={() => navigate("/")}
-                        >
-                            Exchange<span className="text-lime-300">.</span>
-                        </span>
-                    </div>
-
-                    <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
-                        <Link
-                            to="#"
-                            className="hover:text-lime-400 transition-colors"
-                        >
-                            Markets
-                        </Link>
-                        <Link
-                            to="#"
-                            className="hover:text-lime-400 transition-colors"
-                        >
-                            Trade
-                        </Link>
-                        <Link
-                            to="#"
-                            className="hover:text-lime-400 transition-colors"
-                        >
-                            Earn
-                        </Link>
-                        <Link
-                            to="#"
-                            className="hover:text-lime-400 transition-colors"
-                        >
-                            Support
-                        </Link>
-                    </div>
-                </div>
-            </nav>
+            <NavbarMini />
             <div className="min-h-screen bg-zinc-950 text-zinc-100 py-12 px-4 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-5xl space-y-8">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -104,10 +70,10 @@ export const Profile = () => {
                                     {initials}
                                 </div>
                                 <h2 className="text-xl font-bold text-white">
-                                    {isUser.username}
+                                    {user.username}
                                 </h2>
                                 <p className="text-sm text-zinc-400 mb-6">
-                                    {isUser.email}
+                                    {user.email}
                                 </p>
 
                                 <div className="w-full space-y-3 border-t border-zinc-800 pt-6">
@@ -201,7 +167,7 @@ export const Profile = () => {
                                                 Username
                                             </p>
                                             <p className="text-sm font-medium text-zinc-200">
-                                                {isUser.username}
+                                                {user.username}
                                             </p>
                                         </div>
                                     </div>
@@ -215,7 +181,7 @@ export const Profile = () => {
                                                 Email Address
                                             </p>
                                             <p className="text-sm font-medium text-zinc-200">
-                                                {isUser.email}
+                                                {user.email}
                                             </p>
                                         </div>
                                     </div>
@@ -229,7 +195,7 @@ export const Profile = () => {
                                                 Account ID
                                             </p>
                                             <p className="text-sm font-mono text-zinc-400">
-                                                {isUser.id}
+                                                {user.id}
                                             </p>
                                         </div>
                                     </div>

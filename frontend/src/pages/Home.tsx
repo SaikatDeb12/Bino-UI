@@ -7,10 +7,10 @@ import {
     BarChart3,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
-import { useCurrentUser } from "@/hooks/useAuth";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function Home() {
-    const { data: isUser } = useCurrentUser();
+    const user = useAuthStore((state) => state.user);
     const popularMarkets = [
         {
             pair: "BTC/USDT",
@@ -75,7 +75,7 @@ export default function Home() {
                             </p>
 
                             <div className="mt-10 flex flex-col sm:flex-row gap-4">
-                                {isUser ? (
+                                {user ? (
                                     <Link
                                         to="/profile"
                                         className="inline-flex items-center justify-center gap-2 rounded-lg bg-lime-300 px-6 py-3 text-base font-semibold text-zinc-950 transition-all hover:bg-lime-400 focus:outline-none focus:ring-2 focus:ring-lime-500/50"

@@ -6,7 +6,6 @@ import {
     ArrowDownRight,
     RefreshCw,
     Search,
-    TrendingUp,
     AlertCircle,
 } from "lucide-react";
 import { useState } from "react";
@@ -35,15 +34,14 @@ export const Stocks = () => {
 
     const [searchTerm, setSearchTerm] = useState("");
 
-    // Filter markets based on search input
+    // Filter markets
     const filteredMarkets = markets?.filter((market) =>
         market.symbol.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
-    // Format symbol: "BTCUSDT" -> "BTC / USDT"
     const formatSymbol = (symbol: string) => {
         if (symbol.endsWith("USDT")) {
-            return `${symbol.replace("USDT", "")} / USDT`;
+            return `${symbol.replace("USDT", "")}`;
         }
         return symbol;
     };
@@ -61,7 +59,6 @@ export const Stocks = () => {
             <Navbar />
 
             <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-                {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
                     <div>
                         <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -95,7 +92,6 @@ export const Stocks = () => {
                     </div>
                 </div>
 
-                {/* Error State */}
                 {error && (
                     <div className="mb-8 flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-red-400">
                         <AlertCircle className="h-5 w-5 shrink-0" />
@@ -105,7 +101,6 @@ export const Stocks = () => {
                     </div>
                 )}
 
-                {/* Loading State (Skeleton) */}
                 {isPending ? (
                     <div className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40">
                         <div className="p-4 border-b border-zinc-800 bg-zinc-900/60">
@@ -130,7 +125,6 @@ export const Stocks = () => {
                         </div>
                     </div>
                 ) : (
-                    /* Data Table */
                     <div className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/40 shadow-2xl backdrop-blur-xl">
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm">
@@ -252,7 +246,6 @@ export const Stocks = () => {
                             </table>
                         </div>
 
-                        {/* Footer / Last Updated */}
                         {!isPending && (
                             <div className="flex items-center justify-between border-t border-zinc-800 bg-zinc-900/60 px-6 py-3 text-xs text-zinc-500">
                                 <div className="flex items-center gap-2">

@@ -9,6 +9,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "./hooks/useAuth";
 import { CURRENT_USER_QUERY_KEY } from "./lib/auth";
 import { Button } from "./components/ui/button";
+import { Stocks } from "./pages/Stocks";
 
 export const App = () => {
     const queryClient = useQueryClient();
@@ -55,6 +56,7 @@ export const App = () => {
                     <Route path="/signin" element={<SignIn />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/stocks" element={<Stocks />} />
                 </Routes>
             </Router>
         </div>

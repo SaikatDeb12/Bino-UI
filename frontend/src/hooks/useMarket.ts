@@ -4,7 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 export type Market = {
     symbol: string;
     lastPrice: string;
+    priceChange: string;
     priceChangePercent: string;
+    highPrice: string;
+    lowPrice: string;
+    volume: string;
+    quoteVolume: string;
 };
 
 const fetchMarket = async (symbols: string[]): Promise<Market[]> => {

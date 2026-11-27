@@ -5,11 +5,6 @@ export const api = axios.create({
     withCredentials: true,
 });
 
-const refreshApi = axios.create({
-    baseURL: "http://localhost:8000/api/v1/auth",
-    withCredentials: true,
-});
-
 let refreshPromise: Promise<void> | null = null;
 
 const excludedEndpoints = ["/signin", "/signup", "/logout", "/refresh"];
@@ -40,7 +35,7 @@ api.interceptors.response.use(
 
             try {
                 if (!refreshPromise) {
-                    refreshPromise = refreshApi
+                    refreshPromise = api
                         .post("/refresh")
                         .then(() => undefined)
                         .finally(() => {

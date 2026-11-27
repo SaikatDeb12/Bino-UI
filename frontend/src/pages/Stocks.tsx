@@ -1,5 +1,30 @@
-import { NavbarMini } from "@/components/NavbarMini";
+import { Navbar } from "@/components/Navbar";
+import { useMarket } from "@/hooks/useMarket";
 
+const stockSymbols = [
+    "BTCUSDT",
+    "ETHUSDT",
+    "BNBUSDT",
+    "SOLUSDT",
+    "XRPUSDT",
+    "DOGEUSDT",
+    "ADAUSDT",
+    "TRXUSDT",
+    "LINKUSDT",
+    "AVAXUSDT",
+];
 export const Stocks = () => {
-    return <NavbarMini />;
+    const {
+        data: markets,
+        isPending,
+        isFetching,
+        error,
+        refetch,
+    } = useMarket(stockSymbols);
+    return (
+        <>
+            <Navbar />
+            <div></div>
+        </>
+    );
 };
